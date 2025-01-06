@@ -414,7 +414,8 @@
         </div>
 
         <script>
-            const users = [];
+            
+            let users = []; // Declared outside the function
             let currentUser  = null;
 
             function login() {
@@ -471,17 +472,16 @@
 
             // Function to save user data to local storage
             function saveUserData() {
-            if (currentUser) {
-                localStorage.setItem('users', JSON.stringify(users));
-            }
+                if (currentUser) {
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
             }
 
-            // Function to load user data from local storage on page load
             function loadUserData() {
             const storedUsers = localStorage.getItem('users');
-            if (storedUsers) {
-                users = JSON.parse(storedUsers);
-            }
+                if (storedUsers) {
+                    users = JSON.parse(storedUsers); // Now allowed because users is declared outside the function
+                }
             }
 
             // Call loadUserData on page load
