@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zephyrus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #0ad641;
+            text-align: center;
+        }
+
+        .form {
+            background-color: rgba(15, 12, 41, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+        }
+
+        .form input, .form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .form button {
+            background: #ff00ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .form button:hover {
+            background: #ff33cc;
+        }
+
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .product {
+            background: rgba(15, 12, 41, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.2);
+        }
+
+        .product img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .product button {
+            background: #ff00ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .product button:hover {
+            background: #ff33cc;
+        }
+
+        .product input {
+            width: 60px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-bar input {
+            width: 50%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .search-bar button {
+            padding: 10px;
+            background: #ff00ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background: #ff33cc;
+        }
+
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .categories button {
+            padding: 10px;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .categories button:hover {
+            background: #302b63;
+        }
+
+        .basket {
+            position: absolute;
+            top: 20px;
+            right: 60px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+        }
+
+        .history {
+            position 
+            : absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+        }
+
+        .basket-slide, .history-slide {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 300px;
+            height: 100%;
+            background: rgba(15,  12, 41, 0.9);
+            padding: 20px;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+            transition: right 0.3s ease;
+        }
+
+        .basket-slide.active, .history-slide.active {
+            right: 0;
+        }
+
+        .basket-item, .history-item {
+            margin-bottom: 10px;
+        }
+
+        .close-basket {
+            background: #ff00ff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .close-basket:hover {
+            background: #ff33cc;
+        }
+
+        .checkout-form {
+            background-color: rgba(15, 12, 41, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+            margin-top: 20px;
+        }
+
+        .checkout-form input, .checkout-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .checkout-form button {
+            background: #ff00ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .checkout-form button:hover {
+            background: #ff33cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <h1>Zephyrus Vape Store</h1>
+
+        <button class="basket" onclick="toggleBasket()">🛒</button>
+        <button class="history" onclick="toggleHistory()">🕒</button>
+
+        <!-- Login Form -->
+        <div class="form" id="loginForm">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Username" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button onclick="login()">Login</button>
+            <p id="loginMessage"></p>
+            <p>Belum punya akun ? <a href="#" onclick="showRegisterForm()">Daftar di sini</a></p>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="form" id="registerForm" style="display: none;">
+            <h2>Daftar</h2>
+            <input type="text" id="newFullName" placeholder="Nama Lengkap" required>
+            <input type="text" id="newUsername" placeholder="Username" required>
+            <input type="password" id="newPassword" placeholder="Password" required>
+            <input type="text" id="newPhone" placeholder="No. Telepon" required>
+            <input type="text" id="newAddress" placeholder="Alamat" required>
+            <input type="email" id="newEmail" placeholder="Email" required>
+            <button onclick="register()">Daftar</button>
+            <p id="registerMessage" class="success"></p>
+            <p>Sudah punya akun? <a href="#" onclick="showLoginForm()">Login di sini</a></p>
+        </div>
+
+        <div class="container" id="storeContainer" style="display: none;">
+            
+
+            <button onclick="logout()">Logout</button> <!-- Logout Button -->
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Cari produk...">
+                <button onclick="searchProducts()">Cari</button>
+            </div>
+
+            <!-- Categories -->
+            <div class="categories">
+                <button onclick="filterCategory('All')">Semua</button>
+                <button onclick="filterCategory('Device')">Device</button>
+                <button onclick="filterCategory('Liquid')">Liquid</button>
+                <button onclick="filterCategory('Accessory')">Aksesoris</button>
+            </div>
+
+            <!-- Products -->
+            <div class="products" id="productList">
+                <!-- Device -->
+                <div class="product" data-category="Device">
+                    <img src="https://d1d8o7q9jg8pjk.cloudfront.net/p/lg_66b37f6cc51f6.jpg" alt="Device 1">
+                    <h3>Centaurus E40 - Violet Cyclone</h3>
+                    <p>Rp 300.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="Centaurus E40 - Violet Cyclone" data-price="300000" onclick="addToBasket('Centaurus E40 - Violet Cyclone', 300000)">Tambah ke Keranjang</button>
+                </div>
+                <div class="product" data-category="Device">
+                    <img src="https://d1d8o7q9jg8pjk.cloudfront.net/p/lg_66b37efd7e4ba.jpg" alt="Device 2">
+                    <h3>Centaurus E40 - Sakura Cyclone</h3>
+                    <p>Rp 300.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="Centaurus E40 - Sakura Cyclone" data-price="300000" onclick="addToBasket('Centaurus E40 - Sakura Cyclone', 300000)">Tambah ke Keranjang</button>
+                </div>
+                <div class="product" data-category="Device">
+                    <img src="https://vaporshopdirectdistro.com/cdn/shop/files/ursapocket_0002_Saiyan-Trunk_1024x.jpg?v=1693993807" alt="Device 3">
+                    <h3> Ursa Pocket - Saiyan Trunk</h3>
+                    <p>Rp 350.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="Ursa Pocket - Saiyan Trunk" data-price="350000" onclick="addToBasket('Ursa Pocket - Saiyan Trunk', 350000)">Tambah ke Keranjang</button>
+                </div>
+                <div class="product" data-category="Device">
+                    <img src="https://justvape.nu/wp-content/uploads/2023/06/9IIi8fRk.jpeg" alt="Device 4">
+                    <h3> Ursa Pocket - Cyber Elf</h3>
+                    <p>Rp 350.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="Ursa Pocket - Cyber Elf" data-price="350000" onclick="addToBasket('Ursa Pocket - Cyber Elf', 350000)">Tambah ke Keranjang</button>
+                </div>
+                <div class="product" data-category="Device">
+                    <img src="https://s3.bukalapak.com/img/80897542303/s-463-463/data.jpeg.webp" alt="Device 5">
+                    <h3> Oxva Xlim SQ - Luffy</h3>
+                    <p>Rp 370.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="Oxva Xlim - Luffy" data-price="370000" onclick="addToBasket('Oxva Xlim - Luffy', 370000)">Tambah ke Keranjang</button>
+                </div>
+                <div class="product" data-category="Device">
+                    <img src="https://onestore.co.id/wp-content/uploads/2024/06/02fb28c7-ab70-4a99-ac48-23b3765925a6.jpg" alt="Device 6">
+                    <h3>Oxva Xlim SQ - Chopper</h3>
+                    <p>Rp 370.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="Oxva Xlim SQ - Chopper" data-price="370000" onclick="addToBasket('Oxva Xlim SQ - Chopper', 370000)">Tambah ke Keranjang</button>
+                </div>
+                <!-- Liquid -->
+                <div class="product" data-category="Liquid">
+                    <img src="https://foom.id/cdn/shop/files/chocolate-ice-cream-ice-cream-series-foom-lab-global-1.png?v=1721806863" alt="Liquid 1">
+                    <h3>FOOM - Chocolate ice cream</h3>
+                    <p>Rp 110.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="FOOM - Chocolate ice cream" data-price="110000" onclick="addToBasket('FOOM - Chocolate ice cream', 110000)">Tambah ke Keranjang</button>
+                </div>
+                <div class="product" data-category="Liquid">
+                    <img src="https://foom.id/cdn/shop/files/blueberry-cheese-ice-cream-ice-cream-series-foom-lab-global-1.png?v=1721806876" alt="Liquid 2">
+                    <h3>FOOM - Blueberry cheese ice cream</h3>
+                    <p>Rp 110.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="FOOM - Blueberry cheese ice cream" data-price="110000" onclick="addToBasket('FOOM - Blueberry cheese ice cream', 110000)">Tambah ke Keranjang</button>
+                </div>
+                <div class="product" data-category="Liquid">
+                    <img src="https://foom.id/cdn/shop/files/beverage-series-foom-lab-global-14.png?v=1714619679" alt="Liquid 3">
+                    <h3>FOOM - Sparkling Water</h3>
+                    <p>Rp 110.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="FOOM - Sparkling Water" data-price="110000" onclick="addToBasket('FOOM - Sparkling Water', 110000)">Tambah ke Keranjang</button>
+                </div>
+                <div class="product" data-category="Liquid">
+                    <img src="https://foom.id/cdn/shop/files/beverage-series-foom-lab-global-12.png?v=1714619676" alt="Liquid 4">
+                    <h3>FOOM - Orange Water</h3>
+                    <p>Rp 110.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="FOOM - Orange Water" data-price="110000" onclick="addToBasket('FOOM - Orange Water', 110000)">Tambah ke Keranjang</button>
+                </div>
+                <div class="product" data-category="Liquid">
+                    <img src="https://foom.id/cdn/shop/files/beverage-series-foom-lab-global-10.png?v=1714619674" alt="Liquid 5">
+                    <h3>FOOM - Coconut Water</h3>
+                    <p>Rp 110.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="FOOM - Coconut Water" data-price="110000" onclick="addToBasket('FOOM - Coconut Water', 110000)">Tambah ke Keranjang</button>
+                </div>
+                <div class="product" data-category="Liquid">
+                    <img src="https://foom.id/cdn/shop/files/icy_grape_-_front.png?v=1721806090" alt="Liquid 6">
+                    <h3>FOOM - Icy Grape</h3>
+                    <p>Rp 110.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="FOOM - Icy Grape" data-price="110000" onclick="addToBasket('FOOM - Icy Grape', 110000)">Tambah ke Keranjang</button>
+                </div>
+                <!-- Accessory -->
+                <div class="product" data-category="Accessory">
+                    <img src="https://images.tokopedia.net/img/cache/500-square/VqbcmM/2022/1/24/ab505552-cb2b-4013-aca7-f8241a1acdba.jpg" alt="Accessory 1">
+                    <h3>Catridge - Ursa / Centaurus</h3>
+                    <p>Rp 45.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="Catridge - Ursa / Centaurus" data-price="45000" onclick="addToBasket('Catridge - Ursa / Centaurus', 45000)">Tambah ke Keranjang</button>
+                </div>
+                <div class="product" data-category="Accessory">
+                    <img src="https://static.jakmall.id/2022/04/images/products/26af54/detail/oxva-xlim-v2-cartridge-authentic-pod-replacement.jpeg" alt="Accessory 2">
+                    <h3>Catridge - Oxva Xlim SQ</h3>
+                    <p>Rp 45.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="Catridge - Oxva Xlim SQ" data-price="45000" onclick="addToBasket('Catridge - Oxva Xlim SQ', 45000)">Tambah ke Keranjang</button>
+                </div>
+                <div class="product" data-category="Accessory">
+                    <img src="https://img.lazcdn.com/g/ff/kf/S1e4798d231864c22b259703edc6ef446i.jpg_360x360q80.jpg_.webp" alt="Accessory 3">
+                    <h3>Lanyard</h3>
+                    <p>Rp 80.000,00</p>
+                    <input type="number" min="1" value="1" class="product-quantity">
+                    <button class="addToCart" data-name="Lanyard" data-price="800000" onclick="addToBasket('Lanyard', 800000)">Tambah ke Keranjang</button>
+                </div>
+            </div>
+
+            <!-- Basket Slide -->
+            <div class="basket-slide" id="basketSlide">
+                <button class="close-basket" onclick="toggleBasket()">Tutup</button>
+                <h2>Keranjang Anda</h2>
+                <div id="basketItems"></div>
+                <button onclick="checkout()">Checkout</button>
+            </div>
+
+            <!-- History Slide -->
+            <div class="basket-slide" id="historySlide">
+                <button class="close-basket" onclick="toggleHistory()">Tutup</button>
+                <h2>Riwayat Belanja Anda</h2>
+                <div id="historyItems"></div>
+            </div>
+        </div>
+        <!-- Receipt Section -->
+        <div id="receipt" style="display: none;">
+            <h1>Nota Belanja</h1>
+            <div id="receiptDetails"></div>
+        </div>
+
+        <script>
+            const users = [];
+            let currentUser  = null;
+
+            function login() {
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+                const user = users.find(user => user.username === username && user.password === password);
+
+                if (user) {
+                    alert('Login berhasil! Selamat datang, ' + username);
+                    currentUser  = user; // Set current user
+                    document.getElementById('loginForm').style.display = 'none';
+                    document.getElementById('storeContainer').style.display = 'block';
+                    displayBasketItems(); // Display user's basket
+                    saveUserData(); // Save user data after login
+                } else {
+                    document.getElementById('loginMessage').textContent = 'Akun tidak ditemukan. Silakan coba lagi.';
+                }
+            }
+
+            function logout() {
+                currentUser  = null; // Clear current user
+                document.getElementById('storeContainer').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'block';
+                alert('Anda telah logout.');
+            }
+
+            function register() {
+                const newFullName = document.getElementById('newFullName').value;
+                const newUsername = document.getElementById('newUsername').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const newPhone = document.getElementById('newPhone').value;
+                const newAddress = document.getElementById('newAddress').value;
+                const newEmail = document.getElementById('newEmail').value;
+
+                if (users.some(user => user.username === newUsername)) {
+                    document.getElementById('register Message').textContent = 'Username sudah terdaftar.';
+                } else {
+                    const newUser   = { 
+                        fullName: newFullName, 
+                        username: newUsername, 
+                        password: newPassword, 
+                        phone: newPhone, 
+                        address: newAddress, 
+                        email: newEmail, 
+                        basket: [],
+                        history: [] // Add history property
+                    };
+                    users.push(newUser  );
+                    document.getElementById('registerMessage').textContent = 'Pendaftaran berhasil! Silakan login.';
+                    showLoginForm();
+                    saveUserData();
+                }
+            }
+
+            // Function to save user data to local storage
+            function saveUserData() {
+            if (currentUser) {
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            }
+
+            // Function to load user data from local storage on page load
+            function loadUserData() {
+            const storedUsers = localStorage.getItem('users');
+            if (storedUsers) {
+                users = JSON.parse(storedUsers);
+            }
+            }
+
+            // Call loadUserData on page load
+            window.onload = loadUserData;
+
+            function addToBasket(name, price) {
+                if (!currentUser  ) {
+                    alert('Silakan login terlebih dahulu.');
+                    return;
+                }
+                const productElement = Array.from(document.querySelectorAll('.product')).find(product => product.querySelector('h3').textContent === name);
+                const quantityInput = productElement.querySelector('.product-quantity');
+                const quantity = parseInt(quantityInput.value);
+                currentUser  .basket.push({ name, price, quantity });
+                alert(`${name} telah ditambahkan ke keranjang.`);
+                displayBasketItems();
+            }
+
+            function toggleBasket() {
+                const basketSlide = document.getElementById('basketSlide');
+                basketSlide.classList.toggle('active');
+                displayBasketItems();
+            }
+
+            function displayBasketItems() {
+                const basketItemsContainer = document.getElementById('basketItems');
+                basketItemsContainer.innerHTML = '';
+
+                if (!currentUser   || currentUser  .basket.length === 0) {
+                    basketItemsContainer.innerHTML = '<p>Keranjang kosong.</p>';
+                    return;
+                }
+
+                currentUser  .basket.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'basket-item';
+                    itemElement.textContent = `${item.name} - Rp ${item.price} x ${item.quantity}`;
+                    basketItemsContainer.appendChild(itemElement);
+                });
+            }
+
+            function checkout() {
+                if (!currentUser  || currentUser .basket.length === 0) {
+                    alert('Keranjang kosong. Tambahkan produk sebelum checkout.');
+                    return;
+                }
+
+                const paymentMethod = prompt("Pilih metode pembayaran: 1. Dana 2. Transfer Bank 3. QRIS");
+                if (!paymentMethod) return;
+
+                let paymentMethodName;
+                switch (paymentMethod) {
+                    case '1':
+                        paymentMethodName = 'Dana';
+                        break;
+                    case '2':
+                        paymentMethodName = 'Transfer Bank';
+                        break;
+                    case '3':
+                        paymentMethodName = 'QRIS';
+                        break;
+                    default:
+                        alert('Metode pembayaran tidak valid.');
+                        return;
+                }
+
+                const orderSummary = {
+                    name: currentUser .fullName,
+                    phone: currentUser .phone,
+                    address: currentUser .address,
+                    email: currentUser .email,
+                    items: currentUser .basket,
+                    total: currentUser .basket.reduce((total, item) => total + (item.price * item.quantity), 0),
+                    paymentMethod: paymentMethodName
+                };
+
+                // Populate the receipt section
+                generateReceipt(orderSummary);
+
+                // Store purchased items in history
+                currentUser .history.push(orderSummary);
+                currentUser .basket = []; // Clear the basket after checkout
+                displayBasketItems(); // Update the display
+            }
+
+            function generateReceipt(orderSummary) {
+                const receiptDetails = document.getElementById("receiptDetails");
+                receiptDetails.innerHTML = `
+                    <p><strong>Nama:</strong> ${orderSummary.name}</p>
+                    <p><strong>No. Telepon:</strong> ${orderSummary.phone}</p>
+                    <p><strong>Alamat:</strong> ${orderSummary.address}</p>
+                    <p><strong>Email:</strong> ${orderSummary.email}</p>
+                    <p><strong>Metode Pembayaran:</strong> ${orderSummary.paymentMethod}</p>
+                    <h2>Rincian Pesanan:</h2>
+                    ${orderSummary.items.map(item => `
+                        <div>${item.name} - Rp ${item.price} x ${item.quantity}</div>
+                    `).join('')}
+                    <div><strong>Total:</strong> Rp ${orderSummary.total}</div>
+                `;
+
+                // Show the receipt section
+                document.getElementById("receipt").style.display = "block";
+
+                // Print the receipt
+                printReceipt();
+            }
+
+            function printReceipt() {
+                const printContents = document.getElementById("receipt").innerHTML;
+                const originalContents = document.body.innerHTML;
+
+                document.body.innerHTML = printContents;
+                window.print();
+                document.body.innerHTML = originalContents;
+            }
+
+            function toggleHistory() {
+                const historySlide = document.getElementById('historySlide');
+                historySlide.classList.toggle('active');
+                displayHistoryItems();
+            }
+            
+
+            function displayHistoryItems() {
+                const historyItemsContainer = document.getElementById('historyItems');
+                historyItemsContainer.innerHTML = '';
+
+                if (!currentUser   || currentUser  .history.length === 0) {
+                    historyItemsContainer.innerHTML = '<p>Riwayat belanja kosong.</p>';
+                    return;
+                }
+
+                currentUser  .history.forEach(order => {
+                    const orderElement = document.createElement('div');
+                    orderElement.className = 'history-item';
+                    orderElement.innerHTML = `<strong>Nama:</strong> ${order.name}<br>
+                                              <strong>No. Telepon:</strong> ${order.phone}<br>
+                                              <strong>Alamat:</strong> ${order.address}<br>
+                                              <strong>Email:</strong> ${order.email}<br>
+                                              <strong>Metode Pembayaran:</strong> ${order.paymentMethod}<br 
+                                              <strong>Rincian Pesanan:</strong><br>
+                                              ${order.items.map(item => `${item.name} - Rp ${item.price} x ${item.quantity}`).join('<br>')}
+                                              <br><strong>Total:</strong> Rp ${order.total}`;
+                    historyItemsContainer.appendChild(orderElement);
+                });
+            }
+
+            function showRegisterForm() {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+            }
+
+            function showLoginForm() {
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'block';
+            }
+
+            function searchProducts() {
+                const query = document.getElementById('searchInput').value.toLowerCase();
+                const products = document.querySelectorAll('.product');
+
+                products.forEach(product => {
+                    const name = product.querySelector('h3').textContent.toLowerCase();
+                    product.style.display = name.includes(query) ? 'block' : 'none';
+                });
+            }
+
+            function filterCategory(category) {
+                const products = document.querySelectorAll('.product');
+
+                products.forEach(product => {
+                    const productCategory = product.getAttribute('data-category');
+                    product.style.display = category === 'All' || productCategory === category ? 'block' : 'none';
+                });
+            }
+        </script>
+    </div>
+</body>
+</html>
